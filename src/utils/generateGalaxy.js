@@ -15,33 +15,14 @@ export const galaxyGenerator =
       const spinAngle =
         Math.pow(parameters.spin, 2) * radius * (parameters.spin < 0 ? -1 : 1);
       // ramdomness decay in reaseon of the radius
-      const aleatority =
-        Math.pow(radius / parameters.radius - 2, 2) *
-        parameters.randomness *
-        0.2;
-
-      const randomOffsetX =
-        getRandomValue(parameters.randomness, parameters.randomnessPower) *
-        aleatority;
-      const randomOffsetY =
-        getRandomValue(parameters.randomness, parameters.randomnessPower) *
-        aleatority *
-        0.2;
-      const randomOffsetZ =
-        getRandomValue(parameters.randomness, parameters.randomnessPower) *
-        aleatority;
 
       const vertex = {
         x: Math.cos(branchAngle + spinAngle) * radius,
-        y: randomOffsetY,
+        y: 0,
         z: Math.sin(branchAngle + spinAngle) * radius,
       };
 
-      const randomVertex = {
-        x: vertex.x + randomOffsetX,
-        y: vertex.y + randomOffsetY,
-        z: vertex.z + randomOffsetZ,
-      };
+      const randomVertex = getRandomVertex(vertex, radius, parameters);
       const vertexR = aleatorityCorrection(vertex, randomVertex, radius);
       positions[pos] = vertexR.x;
       positions[pos + 1] = vertexR.y;
@@ -58,3 +39,30 @@ export const galaxyGenerator =
     galaxyGgeometry.setAttribute("position", new BufferAttribute(positions, 3));
     galaxyGgeometry.setAttribute("color", new BufferAttribute(colors, 3));
   };
+
+
+  const getRandomVertex = (vertex,radius,parameters,) => {
+    const aleatority =
+        Math.pow(radius / parameters.radius - 2, 2) *
+        parameters.randomness *
+        0.2;
+    const randomOffsetX =
+        getRandomValue(parameters.randomness, parameters.randomnessPower) *
+        aleatority;
+      const randomOffsetY =
+        getRandomValue(parameters.randomness, parameters.randomnessPower) *
+        aleatority *
+        0.2;
+      const randomOffsetZ =
+        getRandomValue(parameters.randomness, parameters.randomnessPower) *
+        aleatority;
+
+        const randomVertex = {
+        x: vertex.x + randomOffsetX,
+        y: vertex.y + randomOffsetY,
+        z: vertex.z + randomOffsetZ,
+      };
+
+      return randomVertex;
+
+  }
