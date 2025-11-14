@@ -2,9 +2,13 @@ import { Color, BufferAttribute } from "three";
 import { aleatorityCorrection, getRandomValue } from "./inde.js";
 
 export const galaxyGenerator =
-  (parameters, galaxyGgeometry, positions, colors) => () => {
+  (parameters, galaxyGgeometry, galaxyMaterial) => () => {
+    const positions = new Float32Array(parameters.count * 3);
+    const colors = new Float32Array(parameters.count * 3);
     let colorInside = new Color(parameters.insideColor);
     let colorOutside = new Color(parameters.outsideColor);
+    galaxyMaterial.setValues({ size: parameters.size });
+
     for (let i = 0; i < parameters.count * 3; i += 3) {
       const pos = i;
       const radius = Math.pow(Math.random(), 2) * parameters.radius;

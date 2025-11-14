@@ -26,18 +26,6 @@ parameters.outsideColor = "#831b3f";
  */
 
 const galaxyGgeometry = new THREE.BufferGeometry();
-const positions = new Float32Array(parameters.count * 3);
-const colors = new Float32Array(parameters.count * 3);
-
-const generateGalaxy = galaxyGenerator(
-  parameters,
-  galaxyGgeometry,
-  positions,
-  colors
-);
-console.log(generateGalaxy);
-setUpGUIControls(parameters, generateGalaxy);
-
 const galaxyMaterial = new THREE.PointsMaterial({
   size: parameters.size,
   sizeAttenuation: true,
@@ -45,6 +33,16 @@ const galaxyMaterial = new THREE.PointsMaterial({
   blending: THREE.AdditiveBlending,
   vertexColors: true,
 });
+
+
+const generateGalaxy = galaxyGenerator(
+  parameters,
+  galaxyGgeometry,
+  galaxyMaterial
+);
+console.log(generateGalaxy);
+setUpGUIControls(parameters, generateGalaxy);
+
 
 const galaxy = new THREE.Points(galaxyGgeometry, galaxyMaterial);
 
