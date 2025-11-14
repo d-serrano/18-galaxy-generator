@@ -28,12 +28,11 @@ export const galaxyGenerator =
       positions[pos + 1] = vertexR.y;
       positions[pos + 2] = vertexR.z;
 
-      const mixedColor = colorInside.clone();
-      mixedColor.lerp(colorOutside, radius / parameters.radius);
+      const vertexColor = getVertexColor(radius, parameters, colorInside, colorOutside);
 
-      colors[pos] = mixedColor.r;
-      colors[pos + 1] = mixedColor.g;
-      colors[pos + 2] = mixedColor.b;
+      colors[pos] = vertexColor.r;
+      colors[pos + 1] = vertexColor.g;
+      colors[pos + 2] = vertexColor.b;
     }
     // add positions of each vertex to the geometry
     galaxyGgeometry.setAttribute("position", new BufferAttribute(positions, 3));
@@ -65,4 +64,10 @@ export const galaxyGenerator =
 
       return randomVertex;
 
+  }
+
+  const getVertexColor = (radius, parameters, colorInside, colorOutside) => {
+    const mixedColor = colorInside.clone();
+    mixedColor.lerp(colorOutside, radius / parameters.radius);
+    return mixedColor;
   }
