@@ -40,7 +40,7 @@ export const galaxyGenerator =
       const aleatority = getAleatority(radius, parameters);
     // get random offsets in the x,z plane
 
-    const maxAngleOffset = Math.PI *0.5; // 90 degrees
+    const maxAngleOffset = Math.PI * (1/parameters.branches); // maximum angle offset to avoid overlapping branches
     const randomAngleOffset = getRandomValue(parameters.randomness, parameters.randomnessPower) ;
 
     // get the random offsets in the x.z plane
