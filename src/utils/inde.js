@@ -3,12 +3,29 @@ const getAleatorityByAxis = (radius, randomness) => {
   return aleatority;
 };
 
-export const getRandomValue = (ramdomness, ramdomnessPower) => {
-  return (
-    Math.pow(Math.random(), ramdomnessPower) *
+// must return a random value between -1 and +1 with a power factor
+export const getRandomPowerValue = (ramdomness, ramdomnessPower) => {
+  let random =  Math.pow(Math.random(), ramdomnessPower) *
     (Math.random() < 0.5 ? 1 : -1) *
-    ramdomness
-  );
+    ramdomness;
+    random += (Math.random() < 0.5 ? 1 : -1) * ramdomness *0.1;
+  return random;
+}
+// return either 1 or -1
+export const getRandomSignUnit = () => Math.random() < 0.5 ? 1 : -1;
+
+// return a random vfalue between -1 and +1
+export const getRandomUnit = () => Math.random()* getRandomSignUnit();
+
+//return a ranmdom fraction of the given value
+export const getRandomFraction = (value) => Math.random()*value;
+
+// return a random value between -randomness and +randomness with a power factor
+export const getRandomValue = (ramdomness, ramdomnessPower) => {
+  const random =  Math.pow(Math.random(), ramdomnessPower) *
+    getRandomSignUnit() *
+    ramdomness;
+  return random;
 };
 
 export const aleatorityCorrection = (vertex, randomVertex, radius) => {

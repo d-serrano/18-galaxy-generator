@@ -1,5 +1,5 @@
 import { Color, BufferAttribute } from "three";
-import { aleatorityCorrection, getRandomValue } from "./inde.js";
+import { aleatorityCorrection, getRandomValue, getRandomSignUnit, getRandomUnit, getRandomFraction  } from "./inde.js";
 
 export const galaxyGenerator =
   (parameters, galaxyGgeometry, galaxyMaterial) => () => {
@@ -11,7 +11,7 @@ export const galaxyGenerator =
 
     for (let i = 0; i < parameters.count * 3; i += 3) {
       const pos = i;
-      const radius = Math.pow(Math.random(), 2) * parameters.radius;
+      const radius = Math.pow(Math.random(), 10) * parameters.radius;
 
       const currentVertex = i / 3;
       const currentBranch = currentVertex % parameters.branches;
@@ -20,17 +20,10 @@ export const galaxyGenerator =
         Math.pow(parameters.spin, 2) * radius * (parameters.spin < 0 ? -1 : 1);
       // ramdomness decay in reaseon of the radius
 
-      const vertex = {
-        x: Math.cos(branchAngle + spinAngle) * radius,
-        y: 0,
-        z: Math.sin(branchAngle + spinAngle) * radius,
-      };
-
-      const randomVertex = getRandomVertex(vertex, radius, parameters);
-      const vertexR = aleatorityCorrection(vertex, randomVertex, radius);
-      positions[pos] = vertexR.x;
-      positions[pos + 1] = vertexR.y;
-      positions[pos + 2] = vertexR.z;
+      const randomVertex = getRandomVertexPolar(radius, branchAngle + spinAngle, parameters);
+      positions[pos] = randomVertex.x;
+      positions[pos + 1] = randomVertex.y;
+      positions[pos + 2] = randomVertex.z;
 
       const vertexColor = getVertexColor(radius, parameters, colorInside, colorOutside);
 
@@ -43,12 +36,39 @@ export const galaxyGenerator =
     galaxyGgeometry.setAttribute("color", new BufferAttribute(colors, 3));
   };
 
+  const getRandomVertexPolar = (radius, tetha, parameters) => {
+      const aleatority = getAleatority(radius, parameters);
+    // get random offsets in the x,z plane
+
+    const maxAngleOffset = Math.PI *0.5; // 90 degrees
+    const randomAngleOffset = getRandomValue(parameters.randomness, parameters.randomnessPower) ;
+
+    // get the random offsets in the x.z plane
+    let randomTethaOffset = getRandomValue(parameters.randomness, parameters.randomnessPower) * aleatority ;
+    
+    randomTethaOffset = Math.abs(randomTethaOffset) < maxAngleOffset ? randomTethaOffset : 0;
+
+    let randomRadiusOffset = getRandomValue(parameters.randomness, parameters.randomnessPower) * aleatority ;
+
+    const randomEpsilon = getRandomValue(parameters.randomness, parameters.randomnessPower) * (1/radius*radius) * aleatority * (Math.random()-0.5);
+
+    const deltaTethaMagnitude = Math.abs(randomTethaOffset);
+    const tethaR = (deltaTethaMagnitude < maxAngleOffset ?  tetha + randomTethaOffset : tetha );
+    const radiusR = radius ;
+
+    return {
+      x: Math.cos(tethaR) * radiusR,
+      y:0,
+      z: Math.sin(tethaR) * radiusR,
+    }
+  }
+
+  const getAleatority = (radius, parameters) => {
+    return  Math.pow(radius / parameters.radius - 1.1, 2) * parameters.randomness ;
+  }
 
   const getRandomVertex = (vertex,radius,parameters,) => {
-    const aleatority =
-        Math.pow(radius / parameters.radius - 2, 2) *
-        parameters.randomness *
-        0.2;
+    const aleatority = getAleatority(radius, parameters);
     const randomOffsetX =
         getRandomValue(parameters.randomness, parameters.randomnessPower) *
         aleatority;

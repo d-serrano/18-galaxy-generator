@@ -14,9 +14,9 @@ const parameters = {};
 parameters.count = 100000;
 parameters.size = 0.01;
 parameters.radius = 5;
-parameters.branches = 5;
-parameters.spin = 1;
-parameters.randomness = 2;
+parameters.branches = 1;
+parameters.spin = 0;
+parameters.randomness = 0.5;
 parameters.randomnessPower = 5;
 parameters.insideColor = "#23e754";
 parameters.outsideColor = "#831b3f";
@@ -33,6 +33,11 @@ const galaxyMaterial = new THREE.PointsMaterial({
   blending: THREE.AdditiveBlending,
   vertexColors: true,
 });
+
+// asix helpers
+
+const axesHelper = new THREE.AxesHelper();
+// scene.add(axesHelper);
 
 
 const generateGalaxy = galaxyGenerator(
